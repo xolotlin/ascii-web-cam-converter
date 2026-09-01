@@ -8,5 +8,5 @@ find_package(OpenCV REQUIRED)
 
 include_directories(${OpenCV_INCLUDE_DIRS})
 
-add_executable(ascii_vision src/main.cpp)
+add_executable(ascii_vision src)
 target_link_libraries(ascii_vision ${OpenCV_LIBS})
