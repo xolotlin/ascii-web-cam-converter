@@ -5,7 +5,7 @@
  **/
 
 #include <opencv2/highgui/highgui.hpp>
-#include <window.h>
+#include "window.h"
 
 #include <iostream>
 #include <string>
