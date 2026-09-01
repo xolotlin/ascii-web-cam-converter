@@ -25,8 +25,8 @@ make
 
 Run the Application
 
-``bash
+```bash
 ./ascii_vision
 ```
 
-- To quit/exit. Focus on the OpenCV preview window and press ESC to stop the program.
+To quit/exit. Focus on the OpenCV preview window and press ESC to stop the program.
