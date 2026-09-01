@@ -12,9 +12,13 @@ class Webcam {
     public:
         // open camera device (0 is default primary camera)
         Webcam(int deviceIdx = 0) : deviceID(deviceIdx) {
-            cap.open(deviceID);
-            if (!cap.isOpened()) {
-                std::cerr << "Error: can't open webcam device index " << deviceID << "\n";
+           try {
+                cap.open(deviceIdx);
+                if (!cap.isOpened()) {
+                    throw std::runtime_error("Failed to open video capture device at index " + std::to_string(deviceIdx));
+                }
+            } catch(const cv::Exception& e) {
+                throw std::runtime_error("OpenCV Videocapture error: " + std::string(e.what()));
             }
         }
 
@@ -31,18 +35,19 @@ class Webcam {
         }
 
         // Read a frame into OpenCV Mat obj safely
-        bool getFrame(cv::Mat frame) {
-            if (!cap.isOpened()) return false;
-
-            cap.read(frame);
-
-            // Ensure frame is non-empty before proceeding
-            if (frame.empty()) {
-                std::cerr << "Warning: Blank frame grabbed.\n";
-                return false;
+        void getFrame(cv::Mat& frame) {
+            if (!cap.isOpened()) {
+                throw std::runtime_error("Webcam device is not open.");
             }
 
-            return true;
+            try {
+                cap.read(frame);
+                if (frame.empty()) {
+                    throw std::runtime_error("Captured a blank frame from webcam.");
+                }
+            } catch (const cv::Exception& e) {
+                throw std::runtime_error("Frame capture error: " + std::string(e.what()));
+            }
         }
 };
 
