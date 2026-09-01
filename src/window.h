@@ -26,6 +26,6 @@ class Window {
             if (!frame.empty()) cv::imshow(windowName, frame);
         }
 
-}
+};
 
-#endif WINDOW_H
+#endif //WINDOW_H
