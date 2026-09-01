@@ -6,6 +6,7 @@
 
 #include <opencv2/highgui/highgui.hpp>
 #include "window.h"
+#include "webcam.h"
 
 #include <iostream>
 #include <string>
@@ -13,16 +14,32 @@
 
 
 int main() {
-    std::cout < "Initializing window...\n";
+    Webcam camera(0);
 
-    // Instantiate our window wrapper
-    Window displayWindow("Webcame Preview");
+    if (!camera.isReady()) {
+        std::cerr << "Exiting: Camera is not available.\n";
+        return -1;
+    }
+
+    std::cout << "Initializing window...\n";
+
+    // Instantiate our window wrapper with initial size 800x600
+    Window displayWindow("Webcame Preview", 800, 600);
+    cv::Mat currentFrame;
 
     std::cout << "Window created succesfully. Press ESC in the terminal to exit.\n";
 
-    // Keep application open briefly until a key is pressed
-    // waits indefinitely for a user key press
-    cv::waitKey(0);
+    for(;;) {
+        // grab frame safely
+        if (!camera.getFrame(currentFrame)) break;
+
+        // display current frame
+        displayWindow.show(currentFrame);
+
+        //waitKey(30) waits 30 ms and listens for user key events (~33 FPS loop rate)
+        // 27 == ESC
+        if (cv::waitKey(30) == 27) break;
+    }
 
     return 0;
 }
